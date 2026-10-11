@@ -1,0 +1,2 @@
+# No third-party Python packages are required by the submitted race client.
+# Tested for syntax and local preflight with Python 3.12.
