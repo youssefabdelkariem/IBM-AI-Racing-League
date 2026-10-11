@@ -7,7 +7,7 @@ Original custom artwork for the `car1-ow1` car driven by `scr_server 1`. Deep gr
 - `car1-ow1.rgb` — 512 × 512 SGI RGB/RGBA texture used by TORCS.
 - `apex-noir-07.png` — viewable texture atlas and editable raster source.
 - `render_livery.py` — original procedural artwork source; requires Pillow and the Windows Bahnschrift font only if you want to regenerate the assets. The race controller has no dependency on either.
-- `previews/` — genuine TORCS screenshots captured after installing the texture, from both sides and the rear. Only the Windows title bar was cropped to remove a local personal file path.
+- `left-side.png`, `right-side.png`, `rear-view.png` — genuine TORCS screenshots captured after installing the texture. Only the Windows title bar was cropped to remove a local personal file path.
 
 ## Install
 
