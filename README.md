@@ -19,6 +19,7 @@ The recorded run used Corkscrew, one lap, standing start, `scr_server 1`, normal
 - `src/race_runner.py`: UDP client, telemetry writer and race summary. `src/preflight_fastest.py`: read-only race and file check.
 - `car-setup.json`: exact setup differences and local hashes; no TORCS car asset is redistributed.
 - `evidence/RESULT.md` and `evidence/SHA256.md`: measured result, provenance and hashes. `licenses/gym-torcs-MIT.txt` and `THIRD_PARTY_NOTICES.md`: upstream attribution.
+- `livery/`: original Apex Noir 07 `car1-ow1` texture, viewable source atlas, generator, installation guide, and in-game previews.
 
 Python **3.12** was used for the packaging checks. The included race scripts use only Python's standard library, so `requirements.txt` has no pip dependencies. Install a Windows TORCS build with the SCR `scr_server` driver, Corkscrew, and `car1-ow1` separately. The tested SCR connection is UDP `127.0.0.1:3001`. The simulator executable and assets are not included.
 
@@ -45,7 +46,7 @@ Wait for `RUN` in the console, then click **New Race** in TORCS. The client shou
 
 The source files in `src/` were changed only to replace one computer's absolute paths with `TORCS_HOME` and local source-file lookup. The control policy and unchanged JSON values were not deliberately changed. Because these copies have not completed an independently verified TORCS lap, **67.064 seconds is not claimed for the portable copy**. Preflight checks local hashes and configuration; it cannot prove lap-time repeatability, normal-damage enforcement, or competition eligibility. Exact reproduction also requires a compatible TORCS/SCR installation, the specified car XML and track XML, and the same race settings. Later local attempts with the unmodified winning controller did not reliably repeat its original launch behavior.
 
-No winning-race screenshot, video link, or custom livery was found in the retained material. None is claimed here. The original result XML and 6.4 MB telemetry remain private local evidence because the XML embeds a personal machine path and the telemetry was unnecessary for this source package. Their hashes are recorded for independent comparison; the XML has not been rewritten.
+No winning-race screenshot or video link was found in the retained material. The separate `livery/` artwork was newly created after that result, installed for an in-game visual check, and is not evidence of the 67.064-second lap. The original result XML and 6.4 MB telemetry remain private local evidence because the XML embeds a personal machine path and the telemetry was unnecessary for this source package. Their hashes are recorded for independent comparison; the XML has not been rewritten.
 
 ## Licensing and acknowledgments
 
