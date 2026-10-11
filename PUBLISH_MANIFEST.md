@@ -17,5 +17,12 @@ Only these files are intended for GitHub publication:
 13. `src/fastest-clean.json` — unchanged winning controller settings.
 14. `evidence/RESULT.md` — measured result and explanation of withheld original artifacts.
 15. `evidence/SHA256.md` — original and published source hashes.
+16. `livery/README.md` — design, install, restore, and mapping notes.
+17. `livery/car1-ow1.rgb` — TORCS SGI texture for `scr_server 1`.
+18. `livery/apex-noir-07.png` — original viewable texture atlas.
+19. `livery/render_livery.py` — original procedural artwork source.
+20. `livery/left-side.png` — in-game left-side view.
+21. `livery/right-side.png` — in-game right-side view.
+22. `livery/rear-view.png` — in-game rear view.
 
-`private_reference/` is local-only and ignored by Git. It holds untouched copies of the original result XML and original/tested car XMLs for audit. It must not be uploaded. No simulator executables, assets, development archive, telemetry, screenshots, video, or livery are included.
+`private_reference/` is local-only and ignored by Git. It holds untouched copies of the original result XML and original/tested car XMLs for audit. It must not be uploaded. No simulator executable, original simulator asset, development archive, race telemetry, or winning-race screenshot/video is included. The newly authored livery and its in-game visual-check screenshots are included under `livery/`.
