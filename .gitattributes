@@ -1,0 +1,3 @@
+# Keep every file byte-exact on every platform, so that controller/SHA256SUMS.txt verifies after a clone on Windows.
+# (Git for Windows would otherwise convert text files to CRLF by default, which changes the checksums of five .py files.)
+* -text
