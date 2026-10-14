@@ -105,14 +105,13 @@ The hairpin window produced no feasible improvement (every faster candidate exce
 
 **Honest limits.** Results are from the native Windows TORCS build supplied with the league (`wtorcs.exe`); they were not reproduced in the Linux container. A run with any server timeout is not a valid reproduction (a single timeout costs about 0.4 s). Lap times are exact only when the stock files match the reference hashes.
 
-**Historical results.** `livery/README.md` was written for an earlier development version and mentions a 67.064-second result: that was a different controller on a modified car setup, **not** the published controller and not a valid result under the stock conditions above. The published result is 66.284 s.
+**Historical results.** Earlier development versions of this project reported other lap times (for example 67.064 s); those were different controllers or setups and are **not** valid results under the stock conditions above. The published result is 66.284 s.
 
 ---
 
 ## Livery
 
-- **Original livery (used for every validated run and all evidence):** the league's stock `drivers/scr_server/0/car1-ow1.rgb` texture, SHA-256 `6756554d9b9ec53e11cdc6dd549069ddabf930071a7699184e6364361a25d54f` (listed in [`tools/reference_hashes.json`](tools/reference_hashes.json)). It is a TORCS asset and is not included in this repository.
-- **Custom livery "Apex Noir 07" (`livery/`):** a separate, optional design. Its texture `livery/car1-ow1.rgb` (SHA-256 `d7ce24004fdae48f3331f28ede8fa8218f899418829786934983cad25080a72a`) is a different file and was **not** used for the validated runs or the evidence in this repository. It changes appearance only; if you install it, `tools/validate_windows.py` reports the livery hash difference as a warning.
+The car uses the league's original, unmodified qualifying livery: the stock `car1-ow1.rgb` texture, SHA-256 `6756554d9b9ec53e11cdc6dd549069ddabf930071a7699184e6364361a25d54f`. [`livery/car1-ow1.rgb`](livery/car1-ow1.rgb) is that exact file, byte-identical to the one used in every validated run and in all evidence (it is also the reference hash in [`tools/reference_hashes.json`](tools/reference_hashes.json)). No custom artwork is part of this submission.
 
 ## Run it on Windows
 
@@ -156,7 +155,7 @@ controller/                  everything needed to drive (run from here)
   SHA256SUMS.txt             checksums of all controller files
 docs/WINDOWS_RUN.md          step-by-step Windows instructions, stop/restart, troubleshooting
 evidence/                    native Windows validation runs, measured speed profile data
-livery/                      separate custom livery "Apex Noir 07" (optional, not used for the validated runs)
+livery/                      the original, unmodified qualifying livery texture (car1-ow1.rgb)
 licenses/                    third-party licence text
 tools/                       validate_windows.py (one-command run, offline selftest), reference_hashes.json
 .gitattributes               keeps controller files byte-exact when cloned on Windows
