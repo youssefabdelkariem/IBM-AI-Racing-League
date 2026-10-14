@@ -14,7 +14,7 @@ All 11 lines must print `OK`. Git for Windows converts text files to CRLF by def
 - The league's Windows TORCS install (the folder that contains `wtorcs.exe`, with the SCR server driver, the Corkscrew track and the `car1-ow1` car). This repository neither installs nor modifies TORCS and contains no TORCS assets.
 - Python 3.9 or newer with numpy (tested: Python 3.9.13, numpy 2.0.2): `python -m pip install -r requirements.txt`
 - A stock, unmodified Corkscrew track XML in that install: `<TORCS folder>\tracks\road\corkscrew\corkscrew.xml` (read-only; reference SHA-256 in [`../tools/reference_hashes.json`](../tools/reference_hashes.json)).
-- The race in TORCS uses the league's original livery texture (`drivers\scr_server\0\car1-ow1.rgb`, SHA-256 in the reference file). The custom livery in `../livery/` is optional and was not used for the validated runs.
+- The race in TORCS uses the league's original livery texture (`drivers\scr_server\0\car1-ow1.rgb`, SHA-256 in the reference file). `../livery/car1-ow1.rgb` is that same original file.
 
 ## Tell the controller where TORCS is
 The controller reads the track geometry from your installed track XML when it starts. Set the TORCS folder in the same PowerShell window you will use to start the controller:

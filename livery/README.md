@@ -1,26 +1,9 @@
-# Apex Noir 07 — TORCS custom livery
+# Original qualifying livery
 
-Original custom artwork for the `car1-ow1` car driven by `scr_server 1`. Deep graphite/navy paint, aqua aero ribbons, restrained gold pinlines, smoked silver cockpit details, and racing number `07` create a clean motorsport identity. No sponsor or third-party logo is used.
+`car1-ow1.rgb` is the original, unmodified livery texture of the IBM AI Racing League car (`car1-ow1`, driver `scr_server 1`), exactly as it is installed at `drivers/scr_server/0/car1-ow1.rgb` in the league's TORCS. It is the livery used for the submitted 66.284 s lap and for all validation runs and evidence in this repository.
 
-## Files
+- SHA-256: `6756554d9b9ec53e11cdc6dd549069ddabf930071a7699184e6364361a25d54f`
+- Size: 1,049,088 bytes (512 x 512 SGI RGB texture)
+- Source: copied byte-for-byte from the validated TORCS installation; not regenerated, edited or re-encoded.
 
-- `car1-ow1.rgb` — 512 × 512 SGI RGB/RGBA texture used by TORCS.
-- `apex-noir-07.png` — viewable texture atlas and editable raster source.
-- `render_livery.py` — original procedural artwork source; requires Pillow and the Windows Bahnschrift font only if you want to regenerate the assets. The race controller has no dependency on either.
-- `left-side.png`, `right-side.png`, `rear-view.png` — genuine TORCS screenshots captured after installing the texture. Only the Windows title bar was cropped to remove a local personal file path.
-
-## Install
-
-The tested driver is `scr_server 1`, whose TORCS robot index is `0`. With TORCS closed, back up the existing texture and copy `car1-ow1.rgb` to:
-
-`<TORCS_HOME>/drivers/scr_server/0/car1-ow1.rgb`
-
-Start TORCS and select Quick Race → Corkscrew → `scr_server 1`. Other drivers may use another numbered folder. The car model calls this SGI texture by the exact filename `car1-ow1.rgb`.
-
-## Restore
-
-Stop TORCS and put your backed-up `drivers/scr_server/0/car1-ow1.rgb` back in that location. The original car-wide texture under `cars/car1-ow1/` is untouched by this package.
-
-## Scope and visual check
-
-The installed livery changes appearance only. It does not change car XML, physics, controller code, the track, or the retained 67.064-second result. The TORCS screenshots show the aqua/navy pattern on both sides and the rear. This older model maps a small race number clearly on one cockpit side; the corresponding number on the opposite side is less prominent. No mirrored text was observed.
+To use it, copy `car1-ow1.rgb` to `<TORCS_HOME>/drivers/scr_server/0/car1-ow1.rgb` (this is already the installed file in the league's TORCS, so normally nothing needs to be done). The race controller does not depend on the texture.

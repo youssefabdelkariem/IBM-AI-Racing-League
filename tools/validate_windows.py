@@ -12,7 +12,7 @@ Verdict (exit code):
   REPRODUCED                (0)  valid run AND best lap time equals the reference 66.284 s
   VALID_RUN_DIFFERENT_TIME  (2)  valid run (see checks) but another lap time
   INVALID_RUN               (1)  any check failed (timeout, damage, no result, client error, ...)
-Stock-file hash differences (for example a custom livery) are reported as warnings; they do not make a run invalid.
+Stock-file hash differences (for example a modified livery) are reported as warnings; they do not make a run invalid.
 """
 import argparse, hashlib, json, os, shutil, subprocess, sys, time
 import xml.etree.ElementTree as ET

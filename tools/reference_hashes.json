@@ -1,5 +1,5 @@
 {
-  "note": "SHA-256 of the stock TORCS files present on the machine where the 66.284 s result was validated (paths relative to the TORCS folder). quickrace.xml is the saved Quick Race configuration (Road, Corkscrew, scr_server 1, 1 lap, standing start); the livery is the league's original car1-ow1 livery texture used in the validated runs (a custom livery gives a different hash; informational only). Informational: other installs may differ.",
+  "note": "SHA-256 of the stock TORCS files present on the machine where the 66.284 s result was validated (paths relative to the TORCS folder). quickrace.xml is the saved Quick Race configuration (Road, Corkscrew, scr_server 1, 1 lap, standing start); the livery is the league's original car1-ow1 livery texture used in the validated runs (informational only). Informational: other installs may differ.",
   "files": {
     "cars/car1-ow1/car1-ow1.xml": "11508796a40553876a762319a5942a0d6c58840f2aaa00ddeea7dfb65dbae199",
     "tracks/road/corkscrew/corkscrew.xml": "2fdbf78f6151093c2450d03edcedc88436877cdd86112795cec6b1d9a5057ea9",
