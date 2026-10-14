@@ -1,7 +1,11 @@
-# Third-party code and simulator
+# Third-party notices
 
-`src/snakeoil3_gym.py` is the SCR protocol client from the gym-torcs project, adapted locally before the recorded run. `licenses/gym-torcs-MIT.txt` preserves the license shipped with that project. The source file credits Chris X Edwards for the earlier Snake Oil client. `src/controller_v3_4.py` imports the protocol classes from that file.
+## Included code
+- **`controller/snakeoil3_gym.py`** - the unmodified SCR (Simulated Car Racing) UDP client supplied with the league starter kit. It is the Snake Oil client by Chris X Edwards as adapted in **gym_torcs** by Naoto Yoshida (MIT License; the licence text is kept in [`licenses/gym-torcs-MIT.txt`](licenses/gym-torcs-MIT.txt)). SHA-256 `6fe87efcd6c772152f8910476c4bfe9ce682f8b71adaf640072e292c0075bdcc`.
 
-TORCS itself, including its executable, track and car assets, is **not** bundled here. Install it separately under its own license terms. The controller reads the installed Corkscrew track XML at runtime; this repository does not redistribute that track. The recorded car XMLs are omitted because they contain simulator material. `car-setup.json` describes only the seven changed setup values and hashes for comparison.
+## Not included
+- **TORCS** (The Open Racing Car Simulator), its executable, the SCR server driver, the `car1-ow1` car and the Corkscrew track are **not** part of this repository and no licence to them is granted here. Install them from the league materials or the TORCS project under their own licences.
+- At start-up the controller reads the stock Corkscrew track XML from your own TORCS installation (read-only). The track XML, car XML and results from your machine are never uploaded or modified by this project.
 
-The IBM Bob and Codex-developed controller, race runner and documentation are presented for inspection and reproduction. Publication does not imply organizer approval of the car setup or track-map use, or grant a broader license to third-party simulator assets.
+## Project code
+The files in `controller/` other than `snakeoil3_gym.py`, and everything in `tools/`, `docs/` and `assets/`, are the project's own work. No open-source licence has been selected for them yet.

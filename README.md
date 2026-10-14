@@ -1,53 +1,154 @@
-# IBM AI Racing League — Autonomous TORCS Racing Controller
+﻿<p align="center">
+  <img src="assets/banner.svg" alt="IBM AI Racing League - Autonomous Racing Controller" width="100%">
+</p>
 
-An autonomous Python controller developed for IBM AI Racing League work in Mechatronics Engineering at Egypt University of Informatics (EUI). A retained TORCS Quick Race result records one **67.064-second Corkscrew lap with zero damage** from a standing start. The 67.064-second result belongs to the **unmodified local winning snapshot** identified in `evidence/SHA256.md`. This repository's controller and launcher are portability-adjusted copies; they have not independently reproduced that time.
+# Autonomous Racing Controller for TORCS - Corkscrew
 
-## What the controller does
+A deterministic Python driver for the IBM AI Racing League challenge: one standing-start lap of the **Corkscrew** circuit in the stock `car1-ow1` Formula-style car, on stock TORCS physics, with **zero damage**. The controller combines an exact model of the track geometry, planned racing line and speed profile, and a closed-loop vehicle controller (steering, braking, traction control, ABS, gearbox and launch). Its parameters were then tuned with a simulator-in-the-loop optimizer that scored every candidate by the official lap time.
 
-The controller uses the installed Corkscrew segment geometry to build a distance-indexed circuit profile. It combines local curvature and a recorded line-offset profile to set corner speed targets. Backward braking and forward acceleration passes make the speed target anticipate upcoming corners and the standing start. During the race it interpolates that profile, tracks the target path with steering feed-forward and heading/position feedback, manages throttle and braking, limits wheel slip, and chooses gears with shift guards. It retains sensor checks, recovery handling, and emergency speed caps from the V3.4 foundation. This is a deterministic controller, not a trained neural-network model.
+| Lap time | Damage | SCR timeouts | Conditions |
+|:--:|:--:|:--:|:--|
+| **66.284 s** | **0** | **0** | Corkscrew, 1 lap, standing start, stock `car1-ow1`, 100 L fuel, stock physics, normal damage |
 
-IBM Bob developed the earlier V2–V5 experiments and the retained V3.4 control and safety foundation. ChatGPT Codex contributed subsequent high-speed controller optimization, track-line tuning, tests, review, and this packaging. IBM Bob did **not** independently produce the final 67.064-second controller. Development included multiple separate configurations and clean races; the fastest result is one measured run and its repeatability is not established. See `evidence/RESULT.md` for the limits of the available evidence.
+Verified in **five consecutive native Windows TORCS runs** (official result XML, simulator log and client log for each are in [`evidence/`](evidence/native_windows_validation/)); all five finished in exactly 66.284 s because TORCS is deterministic when the client answers every step on time.
 
-## Race conditions and compliance disclosure
+---
 
-The recorded run used Corkscrew, one lap, standing start, `scr_server 1`, normal damage, and 5 L starting fuel. The car had **50° front wing, 30° rear wing, 115 mm front ride height, and 125 mm rear ride height**. Engine, tyres, mass, and track geometry were unchanged from the retained local original. This was **not** an unmodified stock car setup. The Python controller reads the installed Corkscrew track XML. Permission under the competition rules for that setup and for reading track geometry has **not been established**; this repository does not claim organizer approval.
+## Qualifying lap
 
-## Files and prerequisites
+[![Watch the verified 66.284-second qualifying lap](https://img.youtube.com/vi/lp-c8A3NIJI/maxresdefault.jpg)](https://youtu.be/lp-c8A3NIJI)
 
-- `src/controller_fastest_clean.py`: portability-adjusted controller. `src/fastest-clean.json` contains the unchanged recorded tuning values.
-- `src/controller_v3_4.py`: IBM Bob's required V3.4 base. `src/snakeoil3_gym.py`: SCR sensor/action protocol classes.
-- `src/race_runner.py`: UDP client, telemetry writer and race summary. `src/preflight_fastest.py`: read-only race and file check.
-- `car-setup.json`: exact setup differences and local hashes; no TORCS car asset is redistributed.
-- `evidence/RESULT.md` and `evidence/SHA256.md`: measured result, provenance and hashes. `licenses/gym-torcs-MIT.txt` and `THIRD_PARTY_NOTICES.md`: upstream attribution.
-- `livery/`: original Apex Noir 07 `car1-ow1` texture, viewable source atlas, generator, installation guide, and in-game previews.
+**Official Qualifying Lap - Corkscrew Circuit - 66.284 Seconds**
 
-Python **3.12** was used for the packaging checks. The included race scripts use only Python's standard library, so `requirements.txt` has no pip dependencies. Install a Windows TORCS build with the SCR `scr_server` driver, Corkscrew, and `car1-ow1` separately. The tested SCR connection is UDP `127.0.0.1:3001`. The simulator executable and assets are not included.
+The video is the author's recorded qualifying footage of the autonomous controller driving the TORCS run itself: https://youtu.be/lp-c8A3NIJI. The graphics elsewhere in this README are either drawn from recorded telemetry of the same lap (labelled *measured*) or are conceptual diagrams (labelled *conceptual*); they are not race footage.
 
-## Run on Windows
+---
 
-Set `TORCS_HOME` to the directory containing `wtorcs.exe`. The current installation's exact car and track hashes are checked by preflight, so a different TORCS version or setup may fail. On a separate copy of TORCS, configure the seven car setup values in `car-setup.json`; preserve a backup of that installation's original car XML. The published package intentionally does not install or change vehicle files automatically.
+## How it works
 
-Open TORCS and select **Race → Quick Race → Configure Race**: Corkscrew, only `scr_server 1`, one lap, and standing start. Return to the Quick Race screen without clicking **New Race**. In PowerShell, from this repository root:
+<p align="center"><img src="assets/architecture.svg" alt="Controller architecture (conceptual diagram)" width="100%"></p>
 
-```powershell
-$env:TORCS_HOME = 'C:\path\to\torcs'
-python .\src\preflight_fastest.py
+```mermaid
+flowchart LR
+    A["Stock Corkscrew<br/>track XML"] --> B["Exact track<br/>geometry model"]
+    B --> C["Racing-line<br/>planner"]
+    C --> D["Speed<br/>planner"]
+    D --> E["Vehicle<br/>controller"]
+    E --> F["SCR UDP client<br/>(starter loop)"]
+    F --> G["TORCS<br/>simulator"]
+    G -- "sensors, 50 Hz" --> E
 ```
 
-Continue **only if preflight passes**. Then run:
+**Offline (when the controller starts)**
 
-```powershell
-python -u .\src\race_runner.py --controller .\src\controller_fastest_clean.py --label fastest-clean --settings-file .\src\fastest-clean.json
+1. **Track model** - the stock track XML is read once, read-only. Straights and arcs (with radius changes) are integrated analytically, which closes the lap at 360.00 degrees; banking is taken from the XML. A coarser 3 m grid model of the same road turns only 347 degrees per lap, which is why the exact model matters.
+2. **Racing line** - a minimum-curvature path inside the road, plus line offsets inside selected windows that were optimized in the simulator.
+3. **Speed planning** - a point-mass friction model with axle-load transfer, aerodynamic downforce, banking and a demonstrated braking table gives the target speed along the line. The planner is stored as arrays (`plan_y2_4.npz`) so no optimization runs during the race.
+
+**Online (every simulator step, 50 Hz)**
+
+- **Steering** - a curvature command built from a look-ahead feed-forward, lateral and heading feedback (pole-placement gains), an understeer feed-forward table, a small integral term, sideslip counter-steer, spin recovery and a steering-rate limit. In the minimum-time windows (330-680 m and the hairpin) the error terms use the exact road heading and an identified steering response delay.
+- **Speed and braking** - the speed target is the plan limited by a live curvature limit; braking pedal comes from the required deceleration with a short brake lead.
+- **Traction control and ABS** - the rear over-speed limit shrinks with lateral load and grows with speed; front slip above 0.12 reduces the brake pedal.
+- **Gearbox** - the lowest gear that stays under the rev limit (from car speed; from driven-wheel speed during the launch), with a dwell time and an up/down rev window.
+- **Launch** - a small clutch command on the grid, a larger traction allowance until 163 km/h, and gear choice from wheel speed rather than car speed.
+- **Timing safety** - the SCR server expects a reply every step. The driver freezes and disables Python garbage collection once before the race so that a collection pause cannot cost a server timeout (each timeout adds latency for the rest of the lap).
+
+### What the telemetry shows
+
+<p align="center"><img src="assets/speed_profile.svg" alt="Speed, brake and throttle along the validated lap (measured)" width="100%"></p>
+
+<p align="center"><img src="assets/track_speed_map.svg" alt="Measured speed on the exact Corkscrew geometry" width="80%"></p>
+
+*Measured: recorded telemetry of the validated controller (identical actions to the five native runs), drawn on the track geometry computed from the stock XML.*
+
+---
+
+## Simulator-in-the-loop optimization
+
+TORCS is deterministic as long as the controller answers every step on time (two runs of the same controller produced bit-identical action streams, and a lap takes about 3 s of wall time). That makes the simulator itself an exact objective function.
+
+- **Method** - a CMA-ES search per corner window over 10 variables (6 lateral-offset nodes of the line, 4 speed-target nodes), one real TORCS lap per candidate, ranked by the **official lap time**.
+- **Hard constraints on every candidate** - zero damage, zero SCR timeouts, standing start, track position and sideslip limits, no spin recovery, and measured guards for the 1,931 m kerb (entry speed at most 272.5 km/h and top speed at most 278.0 km/h; damage appeared at 273.5 and 279.1 km/h).
+- **Validation** - every accepted result was repeated on a second, independent client runner; the final package was validated through the starter client loop (`snakeoil3_gym.py`, unmodified).
+
+| Step (cumulative, stock car) | Official lap |
+|---|---:|
+| Starting point for this series | 66.906 s |
+| 1,528 m corner window | 66.780 s |
+| 770 m corner window | 66.686 s |
+| 1,042 m corner window | 66.526 s |
+| 2,700 m corner window | 66.506 s |
+| 330-680 m complex (line and speed nodes) | 66.356 s |
+| Launch settings (clutch, traction allowance) | **66.284 s** |
+
+The hairpin window produced no feasible improvement (every faster candidate exceeded the sideslip limit), and planner-only changes (speed windows, a rebuilt line-and-speed window and a lateral-law swap at 1,528 m) were slower in the simulator and were rejected.
+
+## Results and reproducibility
+
+| Run | Start order | Official time | Damage | Timeouts |
+|---|---|---:|---:|---:|
+| `native_run1` | client first | 66.284 s | 0 | 0 |
+| `native_run2` | client first | 66.284 s | 0 | 0 |
+| `native_run3` | TORCS first | 66.284 s | 0 | 0 |
+| `native_run4_state_diag` | TORCS first | 66.284 s | 0 | 0 |
+| `native_run5_final` | TORCS first, final files | 66.284 s | 0 | 0 |
+
+- **Fresh-clone check** ([evidence/fresh_clone_validation/](evidence/fresh_clone_validation/)): the repository copied outside the original project, run with `tools/validate_windows.py` and `TORCS_DIR` set - two clean runs at 66.284 s / damage 0 / 0 timeouts; the first attempt hit one SCR timeout while the PC was busy and finished in 67.058 s, which is exactly why a run with any timeout is not counted as a reproduction.
+- `native_run4_state_diag` also records the first server state: lap time -0.982 s, speed 0, **fuel 100.0 L**, damage 0.
+- The controller's actions are identical (SHA-256 over all 3,331 steps) between the development package and this repository's driver on recorded observations.
+- **Reference hashes** of the stock files used in the runs are in [`tools/reference_hashes.json`](tools/reference_hashes.json); the controller files are listed with SHA-256 in [`controller/SHA256SUMS.txt`](controller/SHA256SUMS.txt).
+- The published `official_result.xml` files differ from TORCS' originals only in the two header lines that carried local file paths; the original files' hashes are in [`ORIGINAL_RESULT_XML_SHA256.txt`](evidence/native_windows_validation/ORIGINAL_RESULT_XML_SHA256.txt).
+
+**Honest limits.** Results are from the native Windows TORCS build supplied with the league (`wtorcs.exe`); they were not reproduced in the Linux container. A run with any server timeout is not a valid reproduction (a single timeout costs about 0.4 s). Lap times are exact only when the stock files match the reference hashes.
+
+---
+
+## Run it on Windows
+
+Full guide: [`docs/WINDOWS_RUN.md`](docs/WINDOWS_RUN.md). Summary:
+
+1. Use your existing league TORCS install (the folder with `wtorcs.exe`). Python 3.9+ and numpy: `python -m pip install -r requirements.txt`.
+2. Point the controller at the install (read-only access to the stock Corkscrew XML):
+   ```powershell
+   $env:TORCS_DIR = 'C:\path\to\torcs'
+   ```
+3. Start TORCS: Race, Quick Race, Configure Race: Road, **Corkscrew**, only `scr_server 1`, **1 lap**; click **New Race** (waiting screen).
+4. Start the controller (no extra arguments):
+   ```powershell
+   cd controller
+   python -B run_controller.py
+   ```
+   Expected: `Client connected on 3001..............` and, at the end, `Server has stopped the race on 3001. You were in 1 place.`
+5. Read the official time and damage in the newest `results\quickrace\results-*.xml` in the TORCS folder.
+
+Optional one-command check (starts TORCS and the controller, records everything): `python tools/validate_windows.py my_run` with `TORCS_DIR` set.
+
+## Repository structure
+
+```
+README.md                    this file
+assets/                      banner, architecture diagram (conceptual), measured speed profile and speed map
+controller/                  everything needed to drive (run from here)
+  run_controller.py          entry point: the starter client loop with our driver
+  submission_driver.py       loads settings, drives, guards against GC pauses
+  controller_c3.py           steering, speed, braking, traction, ABS, gearbox, launch
+  c1_plan.py, c3_geom.py, c3_model.py   track geometry, line and speed planning, vehicle model
+  plan_y2_4.npz, line_4.4.npz, line_4.9.npz, settings.json   optimized plan and accepted settings
+  snakeoil3_gym.py           unmodified starter SCR client (MIT, see THIRD_PARTY_NOTICES.md)
+  SHA256SUMS.txt             checksums of all controller files
+docs/WINDOWS_RUN.md          step-by-step Windows instructions, stop/restart, troubleshooting
+evidence/                    native Windows validation runs, measured speed profile data
+livery/                      livery artwork (unchanged, already in the repository)
+licenses/                    third-party licence text
+tools/                       validate_windows.py (one-command run), reference_hashes.json
+requirements.txt             numpy
 ```
 
-Wait for `RUN` in the console, then click **New Race** in TORCS. The client should print `CONNECTED`. It writes new local output under `src/runs/`; that directory is excluded from Git. Press **Ctrl+C** in PowerShell to cancel or stop it after a race. Do not run a second client on port 3001 at the same time.
+## Acknowledgments and licensing
 
-## Reproducibility limits
+- **TORCS** (The Open Racing Car Simulator) and the league-provided SCR server, car and track. No TORCS asset is included here (the controller reads the stock track XML from your install); no licence is granted for TORCS assets.
+- **gym_torcs / Snake Oil** SCR client: `controller/snakeoil3_gym.py` is the unmodified starter file (gym_torcs by Naoto Yoshida, MIT; Snake Oil client by Chris X Edwards). See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and `licenses/`.
+- **IBM AI Racing League** and IBM SkillsBuild, built for the league at Egypt University of Informatics.
+- Developed and maintained by [@youssefabdelkariem](https://github.com/youssefabdelkariem) with AI-assisted engineering tools; the competition's tool disclosure is provided separately. No open-source licence has been selected yet for the project's own code.
 
-The source files in `src/` were changed only to replace one computer's absolute paths with `TORCS_HOME` and local source-file lookup. The control policy and unchanged JSON values were not deliberately changed. Because these copies have not completed an independently verified TORCS lap, **67.064 seconds is not claimed for the portable copy**. Preflight checks local hashes and configuration; it cannot prove lap-time repeatability, normal-damage enforcement, or competition eligibility. Exact reproduction also requires a compatible TORCS/SCR installation, the specified car XML and track XML, and the same race settings. Later local attempts with the unmodified winning controller did not reliably repeat its original launch behavior.
-
-No winning-race screenshot or video link was found in the retained material. The separate `livery/` artwork was newly created after that result, installed for an in-game visual check, and is not evidence of the 67.064-second lap. The original result XML and 6.4 MB telemetry remain private local evidence because the XML embeds a personal machine path and the telemetry was unnecessary for this source package. Their hashes are recorded for independent comparison; the XML has not been rewritten.
-
-## Licensing and acknowledgments
-
-The MIT license supplied with the gym-torcs dependency is retained under `licenses/`. See `THIRD_PARTY_NOTICES.md` for upstream credits and TORCS asset exclusions. No license for the original TORCS distribution or assets is granted by this repository. The IBM Bob/Codex project-specific files have no additional open-source license declaration in this submission.

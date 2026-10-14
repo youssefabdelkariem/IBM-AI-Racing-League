@@ -1,0 +1,19 @@
+{
+  "label": "fresh_clone_test",
+  "python": "3.9.13",
+  "client_exit": 0,
+  "timeouts_measured": 1,
+  "stock_files_match_reference": {
+    "cars/car1-ow1/car1-ow1.xml": true,
+    "tracks/road/corkscrew/corkscrew.xml": true,
+    "config/raceman/quickrace.xml": true,
+    "drivers/scr_server/0/car1-ow1.rgb": true
+  },
+  "official": {
+    "laps": "1",
+    "time": "67.058",
+    "best lap time": "67.058",
+    "dammages": "0"
+  },
+  "valid_reproduction": false
+}

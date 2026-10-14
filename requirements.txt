@@ -1,2 +1,2 @@
-# No third-party Python packages are required by the submitted race client.
-# Tested for syntax and local preflight with Python 3.12.
+numpy>=1.21   # tested with numpy 2.0.2 on Python 3.9.13
+

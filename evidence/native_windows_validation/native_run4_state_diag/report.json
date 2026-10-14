@@ -1,0 +1,35 @@
+{
+  "label": "native_run4_state_diag",
+  "python": "3.9.13",
+  "client_exit": 0,
+  "sim_exit": 0,
+  "stock_match": true,
+  "wall_seconds": 13.1,
+  "timeouts_measured": 0,
+  "client_connected": true,
+  "client_server_stopped": true,
+  "official": [
+    [
+      "laps",
+      "1"
+    ],
+    [
+      "laps",
+      "1"
+    ],
+    [
+      "time",
+      "66.284"
+    ],
+    [
+      "best lap time",
+      "66.284"
+    ],
+    [
+      "dammages",
+      "0"
+    ]
+  ],
+  "lap_time": 66.284,
+  "damage": 0.0
+}

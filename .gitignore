@@ -1,9 +1,23 @@
+# Python caches
 __pycache__/
-*.py[cod]
-.idea/
+*.pyc
+
+# local validation output, telemetry and logs
+validation_runs/
+runs/
+*.jsonl
+*.log
+
+# environment and editor files
 .venv/
 venv/
-runs/
-private_reference/
-*.log
-*.tmp
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# large binaries (the qualifying video lives on YouTube)
+*.mp4
+*.mov
+*.zip
+

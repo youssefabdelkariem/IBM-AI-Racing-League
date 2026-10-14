@@ -1,0 +1,9 @@
+{
+  "note": "SHA-256 of the stock TORCS files present on the machine where the 66.284 s result was validated (paths relative to the TORCS folder). quickrace.xml is the saved Quick Race configuration (Road, Corkscrew, scr_server 1, 1 lap, standing start); the livery is the car1-ow1 texture used in the validated runs. Informational: other installs may differ.",
+  "files": {
+    "cars/car1-ow1/car1-ow1.xml": "11508796a40553876a762319a5942a0d6c58840f2aaa00ddeea7dfb65dbae199",
+    "tracks/road/corkscrew/corkscrew.xml": "2fdbf78f6151093c2450d03edcedc88436877cdd86112795cec6b1d9a5057ea9",
+    "config/raceman/quickrace.xml": "a4b1b6682e5a584cc6f61c426895cb2dec92806310a72d99ba6ba61c0a09593d",
+    "drivers/scr_server/0/car1-ow1.rgb": "6756554d9b9ec53e11cdc6dd549069ddabf930071a7699184e6364361a25d54f"
+  }
+}

@@ -1,0 +1,5 @@
+1a2a9541bf483aecc007930c3c92037d7fe070f1f59cd661c554ab84e12caa5f  native_run1/official_result.xml (unsanitised original; only header lines 2-3 differ in the published copy)
+1a2a9541bf483aecc007930c3c92037d7fe070f1f59cd661c554ab84e12caa5f  native_run2/official_result.xml (unsanitised original; only header lines 2-3 differ in the published copy)
+1a2a9541bf483aecc007930c3c92037d7fe070f1f59cd661c554ab84e12caa5f  native_run3/official_result.xml (unsanitised original; only header lines 2-3 differ in the published copy)
+1a2a9541bf483aecc007930c3c92037d7fe070f1f59cd661c554ab84e12caa5f  native_run4_state_diag/official_result.xml (unsanitised original; only header lines 2-3 differ in the published copy)
+1a2a9541bf483aecc007930c3c92037d7fe070f1f59cd661c554ab84e12caa5f  native_run5_final/official_result.xml (unsanitised original; only header lines 2-3 differ in the published copy)

@@ -1,0 +1,22 @@
+{
+ "steps": 3331,
+ "first": {
+  "curLapTime": -0.982,
+  "speedX": -0.00913045,
+  "fuel": 100.0,
+  "damage": 0.0,
+  "gear": 0.0,
+  "distFromStart": 3598.45,
+  "trackPos": 0.333439,
+  "rpm": 5235.99
+ },
+ "last": {
+  "curLapTime": 1.728,
+  "lastLapTime": 66.284,
+  "speedX": 176.047,
+  "fuel": 96.1675,
+  "damage": 0.0,
+  "distRaced": 3712.62
+ },
+ "max_damage": 0.0
+}
