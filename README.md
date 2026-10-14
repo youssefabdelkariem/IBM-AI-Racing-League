@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="assets/banner.svg" alt="IBM AI Racing League - Autonomous Racing Controller" width="100%">
 </p>
 
@@ -8,7 +8,7 @@ A deterministic Python driver for the IBM AI Racing League challenge: one standi
 
 | Lap time | Damage | SCR timeouts | Conditions |
 |:--:|:--:|:--:|:--|
-| **66.284 s** | **0** | **0** | Corkscrew, 1 lap, standing start, stock `car1-ow1`, 100 L fuel, stock physics, normal damage |
+| **66.284 s** | **0** | **0** | Corkscrew, 1 lap, standing start, stock `car1-ow1`, 100 L fuel, stock physics, normal damage, original livery texture |
 
 Verified in **five consecutive native Windows TORCS runs** (official result XML, simulator log and client log for each are in [`evidence/`](evidence/native_windows_validation/)); all five finished in exactly 66.284 s because TORCS is deterministic when the client answers every step on time.
 
@@ -66,11 +66,13 @@ flowchart LR
 
 ## Simulator-in-the-loop optimization
 
-TORCS is deterministic as long as the controller answers every step on time (two runs of the same controller produced bit-identical action streams, and a lap takes about 3 s of wall time). That makes the simulator itself an exact objective function.
+TORCS is deterministic as long as the controller answers every step on time (two runs of the same controller produced bit-identical action streams), and a lap is simulated faster than real time (about 3 s of wall time per lap in the optimization runner; 7-19 s per complete validation run including start-up). That makes the simulator itself an exact objective function.
 
 - **Method** - a CMA-ES search per corner window over 10 variables (6 lateral-offset nodes of the line, 4 speed-target nodes), one real TORCS lap per candidate, ranked by the **official lap time**.
 - **Hard constraints on every candidate** - zero damage, zero SCR timeouts, standing start, track position and sideslip limits, no spin recovery, and measured guards for the 1,931 m kerb (entry speed at most 272.5 km/h and top speed at most 278.0 km/h; damage appeared at 273.5 and 279.1 km/h).
 - **Validation** - every accepted result was repeated on a second, independent client runner; the final package was validated through the starter client loop (`snakeoil3_gym.py`, unmodified).
+
+*Development history (earlier milestones, not separate deliverables): each row is the best validated candidate after that step, all with the stock car; only the last row is the published controller.*
 
 | Step (cumulative, stock car) | Official lap |
 |---|---:|
@@ -88,13 +90,14 @@ The hairpin window produced no feasible improvement (every faster candidate exce
 
 | Run | Start order | Official time | Damage | Timeouts |
 |---|---|---:|---:|---:|
-| `native_run1` | client first | 66.284 s | 0 | 0 |
-| `native_run2` | client first | 66.284 s | 0 | 0 |
+| `native_run1` | client first (see note) | 66.284 s | 0 | 0 |
+| `native_run2` | client first (see note) | 66.284 s | 0 | 0 |
 | `native_run3` | TORCS first | 66.284 s | 0 | 0 |
 | `native_run4_state_diag` | TORCS first | 66.284 s | 0 | 0 |
 | `native_run5_final` | TORCS first, final files | 66.284 s | 0 | 0 |
 
 - **Fresh-clone check** ([evidence/fresh_clone_validation/](evidence/fresh_clone_validation/)): the repository copied outside the original project, run with `tools/validate_windows.py` and `TORCS_DIR` set - two clean runs at 66.284 s / damage 0 / 0 timeouts; the first attempt hit one SCR timeout while the PC was busy and finished in 67.058 s, which is exactly why a run with any timeout is not counted as a reproduction.
+- *Note:* in `native_run1` and `native_run2` the controller was started about 1 s before TORCS, so the starter client printed its handshake countdown and reached its `relaunch torcs` branch (the `pkill`, `torcs` and `sh` commands it tries do not exist on Windows; see `client_stderr.txt`). The race itself was unaffected. The documented order is TORCS first, as in runs 3-5.
 - `native_run4_state_diag` also records the first server state: lap time -0.982 s, speed 0, **fuel 100.0 L**, damage 0.
 - The controller's actions are identical (SHA-256 over all 3,331 steps) between the development package and this repository's driver on recorded observations.
 - **Reference hashes** of the stock files used in the runs are in [`tools/reference_hashes.json`](tools/reference_hashes.json); the controller files are listed with SHA-256 in [`controller/SHA256SUMS.txt`](controller/SHA256SUMS.txt).
@@ -102,19 +105,33 @@ The hairpin window produced no feasible improvement (every faster candidate exce
 
 **Honest limits.** Results are from the native Windows TORCS build supplied with the league (`wtorcs.exe`); they were not reproduced in the Linux container. A run with any server timeout is not a valid reproduction (a single timeout costs about 0.4 s). Lap times are exact only when the stock files match the reference hashes.
 
+**Historical results.** `livery/README.md` was written for an earlier development version and mentions a 67.064-second result: that was a different controller on a modified car setup, **not** the published controller and not a valid result under the stock conditions above. The published result is 66.284 s.
+
 ---
+
+## Livery
+
+- **Original livery (used for every validated run and all evidence):** the league's stock `drivers/scr_server/0/car1-ow1.rgb` texture, SHA-256 `6756554d9b9ec53e11cdc6dd549069ddabf930071a7699184e6364361a25d54f` (listed in [`tools/reference_hashes.json`](tools/reference_hashes.json)). It is a TORCS asset and is not included in this repository.
+- **Custom livery "Apex Noir 07" (`livery/`):** a separate, optional design. Its texture `livery/car1-ow1.rgb` (SHA-256 `d7ce24004fdae48f3331f28ede8fa8218f899418829786934983cad25080a72a`) is a different file and was **not** used for the validated runs or the evidence in this repository. It changes appearance only; if you install it, `tools/validate_windows.py` reports the livery hash difference as a warning.
 
 ## Run it on Windows
 
 Full guide: [`docs/WINDOWS_RUN.md`](docs/WINDOWS_RUN.md). Summary:
 
+0. Get the code and verify it (PowerShell). Use `core.autocrlf=false` so the files stay byte-exact (the repository also ships a `.gitattributes` for this):
+   ```powershell
+   git clone -c core.autocrlf=false https://github.com/youssefabdelkariem/IBM-AI-Racing-League.git
+   cd IBM-AI-Racing-League\controller
+   Get-Content SHA256SUMS.txt | ForEach-Object { $h, $f = $_ -split '\s+', 2; if ((Get-FileHash $f -Algorithm SHA256).Hash.ToLower() -eq $h) { "OK    $f" } else { "DIFF  $f" } }
+   ```
+   All 11 lines must print `OK`.
 1. Use your existing league TORCS install (the folder with `wtorcs.exe`). Python 3.9+ and numpy: `python -m pip install -r requirements.txt`.
 2. Point the controller at the install (read-only access to the stock Corkscrew XML):
    ```powershell
    $env:TORCS_DIR = 'C:\path\to\torcs'
    ```
 3. Start TORCS: Race, Quick Race, Configure Race: Road, **Corkscrew**, only `scr_server 1`, **1 lap**; click **New Race** (waiting screen).
-4. Start the controller (no extra arguments):
+4. Start the controller (no extra arguments) from the repository root:
    ```powershell
    cd controller
    python -B run_controller.py
@@ -122,7 +139,7 @@ Full guide: [`docs/WINDOWS_RUN.md`](docs/WINDOWS_RUN.md). Summary:
    Expected: `Client connected on 3001..............` and, at the end, `Server has stopped the race on 3001. You were in 1 place.`
 5. Read the official time and damage in the newest `results\quickrace\results-*.xml` in the TORCS folder.
 
-Optional one-command check (starts TORCS and the controller, records everything): `python tools/validate_windows.py my_run` with `TORCS_DIR` set.
+Optional one-command check (starts TORCS, then the controller, and records everything): `python tools/validate_windows.py my_run` with `TORCS_DIR` set. It prints a verdict - `REPRODUCED` (valid run at 66.284 s), `VALID_RUN_DIFFERENT_TIME` or `INVALID_RUN` (any timeout, damage or client error) - and returns a matching exit code. `--check-only` only verifies the paths; `--selftest` re-checks the acceptance logic offline against the published evidence.
 
 ## Repository structure
 
@@ -139,9 +156,10 @@ controller/                  everything needed to drive (run from here)
   SHA256SUMS.txt             checksums of all controller files
 docs/WINDOWS_RUN.md          step-by-step Windows instructions, stop/restart, troubleshooting
 evidence/                    native Windows validation runs, measured speed profile data
-livery/                      livery artwork (unchanged, already in the repository)
+livery/                      separate custom livery "Apex Noir 07" (optional, not used for the validated runs)
 licenses/                    third-party licence text
-tools/                       validate_windows.py (one-command run), reference_hashes.json
+tools/                       validate_windows.py (one-command run, offline selftest), reference_hashes.json
+.gitattributes               keeps controller files byte-exact when cloned on Windows
 requirements.txt             numpy
 ```
 
