@@ -149,6 +149,6 @@ requirements.txt             numpy
 
 - **TORCS** (The Open Racing Car Simulator) and the league-provided SCR server, car and track. No TORCS asset is included here (the controller reads the stock track XML from your install); no licence is granted for TORCS assets.
 - **gym_torcs / Snake Oil** SCR client: `controller/snakeoil3_gym.py` is the unmodified starter file (gym_torcs by Naoto Yoshida, MIT; Snake Oil client by Chris X Edwards). See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and `licenses/`.
-- **IBM AI Racing League** and IBM SkillsBuild, built for the league at Egypt University of Informatics.
+- **IBM AI Racing League** and IBM SkillsBuild, built for the league.
 - Developed and maintained by [@youssefabdelkariem](https://github.com/youssefabdelkariem) with AI-assisted engineering tools; the competition's tool disclosure is provided separately. No open-source licence has been selected yet for the project's own code.
 
