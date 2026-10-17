@@ -1,7 +1,7 @@
 <p align="center">
   <img src="assets/banner.svg" alt="IBM AI Racing League - Autonomous Racing Controller" width="100%">
 </p>
-
+check : https://youssef.studio/engineering/ibm-ai-racing/
 # Autonomous Racing Controller for TORCS - Corkscrew
 
 A deterministic Python driver for the IBM AI Racing League challenge: one standing-start lap of the **Corkscrew** circuit in the stock `car1-ow1` Formula-style car, on stock TORCS physics, with **zero damage**. The controller combines an exact model of the track geometry, planned racing line and speed profile, and a closed-loop vehicle controller (steering, braking, traction control, ABS, gearbox and launch). Its parameters were then tuned with a simulator-in-the-loop optimizer that scored every candidate by the official lap time.
