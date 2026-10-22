@@ -264,7 +264,9 @@ def drive(client):
 
     # ---- longitudinal -----------------------------------------------------------------------
     lead = params['brake_lead'] if _LEADV is None else _at(_LEADV, d)
-    dl = min(d + v * lead, L - 0.5) if d > 0.5 * L else d + v * lead
+    # end of lap: clamp the look-ahead at the last plan sample - interpolating past it wraps into index 0, which holds the
+    # standing-start speed cap (lap one only), and made the car brake for the finish line
+    dl = min(d + v * lead, L - _ds) if d > 0.5 * L else d + v * lead
     v_t = _at(_vplan, dl); v_raw = v_t; lim = 0
     n_now = _at(_nref, d)
     err = abs(n_car - n_now)
@@ -274,7 +276,7 @@ def drive(client):
     if ap > params['edge_pos']:
         v_t = max(v_t - params['edge_k'] * (ap - params['edge_pos']) * 100.0 / 3.6, 15.0); lim |= 2
     # live limiter: if the curvature being demanded exceeds what the tyres can give, slow down
-    v_a = _at(_vplan, min(dl + 8.0, L - 0.5) if d > 0.5 * L else dl + 8.0)
+    v_a = _at(_vplan, min(dl + 8.0, L - _ds) if d > 0.5 * L else dl + 8.0)
     for _m, _za, _zb, _dec in ((params['pb_m'], params['pb_a'], params['pb_b'], params['pb_dec']),
                                (params['pb2_m'], params['pb2_a'], params['pb2_b'], params['pb2_dec'])):
         if _m > 0.0 and _za <= d < _zb:

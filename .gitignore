@@ -21,3 +21,20 @@ Thumbs.db
 *.mov
 *.zip
 
+
+# raw recordings, telemetry and research material stay outside the repository
+*.mkv
+*.avi
+*.webm
+*.gz
+telemetry*
+research/
+private_reference/
+
+# credentials, certificates and local environment files
+.env
+*.pem
+*.key
+*.pfx
+*.p12
+credentials*

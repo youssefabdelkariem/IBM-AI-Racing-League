@@ -1,0 +1,57 @@
+[
+ {
+  "label": "repo_run1",
+  "exit": 0,
+  "verdict": "REPRODUCED",
+  "lap": 65.968,
+  "damage": "0",
+  "timeouts": 0,
+  "client_exit": 0,
+  "stock_unchanged_extended": true,
+  "wall_s": 12.6
+ },
+ {
+  "label": "repo_run2",
+  "exit": 0,
+  "verdict": "REPRODUCED",
+  "lap": 65.968,
+  "damage": "0",
+  "timeouts": 0,
+  "client_exit": 0,
+  "stock_unchanged_extended": true,
+  "wall_s": 11.6
+ },
+ {
+  "label": "repo_run3",
+  "exit": 0,
+  "verdict": "REPRODUCED",
+  "lap": 65.968,
+  "damage": "0",
+  "timeouts": 0,
+  "client_exit": 0,
+  "stock_unchanged_extended": true,
+  "wall_s": 11.8
+ },
+ {
+  "label": "repo_run4",
+  "exit": 0,
+  "verdict": "REPRODUCED",
+  "lap": 65.968,
+  "damage": "0",
+  "timeouts": 0,
+  "client_exit": 0,
+  "stock_unchanged_extended": true,
+  "wall_s": 11.7
+ },
+ {
+  "label": "repo_run5",
+  "exit": 0,
+  "verdict": "REPRODUCED",
+  "lap": 65.968,
+  "damage": "0",
+  "timeouts": 0,
+  "client_exit": 0,
+  "stock_unchanged_extended": true,
+  "wall_s": 11.7
+ }
+]

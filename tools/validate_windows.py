@@ -9,7 +9,7 @@ The race that is started is the Quick Race saved in <TORCS_DIR>/config/raceman/q
 Road, Corkscrew, scr_server 1 only, 1 lap). TORCS is started first, then the controller (the official order).
 
 Verdict (exit code):
-  REPRODUCED                (0)  valid run AND best lap time equals the reference 66.284 s
+  REPRODUCED                (0)  valid run AND best lap time equals the reference 65.968 s (release P1)
   VALID_RUN_DIFFERENT_TIME  (2)  valid run (see checks) but another lap time
   INVALID_RUN               (1)  any check failed (timeout, damage, no result, client error, ...)
 Stock-file hash differences (for example a modified livery) are reported as warnings; they do not make a run invalid.
@@ -19,7 +19,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-REFERENCE_TIME = 66.284
+REFERENCE_TIME = 65.968
 TIME_TOLERANCE = 0.0005
 
 
@@ -84,10 +84,13 @@ EXIT = {'REPRODUCED': 0, 'VALID_RUN_DIFFERENT_TIME': 2, 'INVALID_RUN': 1}
 
 
 def selftest():
-    """Offline: re-evaluate the published evidence (no TORCS needed) and check the verdicts are the expected ones."""
-    ev = REPO / 'evidence'; expected = []
-    for run in sorted((ev / 'native_windows_validation').glob('native_run*')): expected.append((run, 'REPRODUCED'))
-    expected += [(ev / 'fresh_clone_validation' / 'fresh_clone_test', 'INVALID_RUN'), (ev / 'fresh_clone_validation' / 'fresh_clone_test2', 'REPRODUCED'), (ev / 'fresh_clone_validation' / 'fresh_clone_test3', 'REPRODUCED')]
+    """Offline: re-evaluate the published evidence (no TORCS needed) and check the verdicts are the expected ones.
+    Release P1 runs must be REPRODUCED; the clean runs of the previous 66.284 s release are valid runs with a different time."""
+    ev = REPO / 'evidence'; old = ev / 'release_66284'; expected = []
+    for run in sorted((ev / 'release_p1_65968').glob('repo_run*')): expected.append((run, 'REPRODUCED'))
+    if not expected: print('no release P1 evidence found in evidence/release_p1_65968'); return 1
+    for run in sorted((old / 'native_windows_validation').glob('native_run*')): expected.append((run, 'VALID_RUN_DIFFERENT_TIME'))
+    expected += [(old / 'fresh_clone_validation' / 'fresh_clone_test', 'INVALID_RUN'), (old / 'fresh_clone_validation' / 'fresh_clone_test2', 'VALID_RUN_DIFFERENT_TIME'), (old / 'fresh_clone_validation' / 'fresh_clone_test3', 'VALID_RUN_DIFFERENT_TIME')]
     ok = True
     for run, want in expected:
         rep = json.loads((run / 'report.json').read_text()); entry = parse_result(run / 'official_result.xml')
@@ -95,7 +98,7 @@ def selftest():
         got, checks, t = evaluate(entry, rep.get('timeouts_measured'), rep.get('client_exit'), log)
         print('%-28s time %-7s timeouts %s -> %-24s (expected %s)%s' % (run.name, t, rep.get('timeouts_measured'), got, want, '' if got == want else '   <-- MISMATCH'))
         ok &= (got == want)
-    synth = dict(name='scr_server 1', car='car1-ow1', laps='1', time='66.284', **{'best lap time': '66.284', 'dammages': '120'})
+    synth = dict(name='scr_server 1', car='car1-ow1', laps='1', time='65.968', **{'best lap time': '65.968', 'dammages': '120'})
     got = evaluate(synth, 0, 0, 'Server has stopped the race')[0]; print('%-28s synthetic damage 120 -> %s (expected INVALID_RUN)' % ('synthetic', got)); ok &= got == 'INVALID_RUN'
     synth['dammages'] = '0'; synth['best lap time'] = '66.9'; got = evaluate(synth, 0, 0, 'Server has stopped the race')[0]
     print('%-28s synthetic 66.9 s clean -> %s (expected VALID_RUN_DIFFERENT_TIME)' % ('synthetic', got)); ok &= got == 'VALID_RUN_DIFFERENT_TIME'

@@ -1,0 +1,40 @@
+{
+  "label": "repo_run3",
+  "python": "3.9.13",
+  "verdict": "REPRODUCED",
+  "lap_time": 65.968,
+  "reference_time": 65.968,
+  "damage": "0",
+  "timeouts_measured": 0,
+  "client_exit": 0,
+  "checks": {
+    "official_result_found": true,
+    "one_lap_completed": true,
+    "lap_time_present": true,
+    "damage_is_zero": true,
+    "no_scr_timeouts": true,
+    "client_exit_zero": true,
+    "race_ended_by_server": true,
+    "driver_and_car": true
+  },
+  "stock_files_match_reference": {
+    "cars/car1-ow1/car1-ow1.xml": true,
+    "tracks/road/corkscrew/corkscrew.xml": true,
+    "config/raceman/quickrace.xml": true,
+    "drivers/scr_server/0/car1-ow1.rgb": true
+  },
+  "official": {
+    "name": "scr_server 1",
+    "car": "car1-ow1",
+    "index": "0",
+    "laps": "1",
+    "time": "65.968",
+    "best lap time": "65.968",
+    "top speed": "81.5599",
+    "dammages": "0",
+    "pits stops": "0",
+    "module": "scr_server",
+    "idx": "0",
+    "points": "0"
+  }
+}
