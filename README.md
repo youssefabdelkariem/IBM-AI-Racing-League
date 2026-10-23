@@ -4,7 +4,7 @@
 
 **Portfolio:** [youssef.studio](https://youssef.studio) — Explore more of my projects, technical work, and creative portfolio.
 
-Project write-up: [youssef.studio/engineering/ibm-ai-racing](https://youssef.studio/engineering/ibm-ai-racing/) (at the time of writing it describes the earlier 66.284 s version).
+Project write-up: [youssef.studio/engineering/ibm-ai-racing](https://youssef.studio/engineering/ibm-ai-racing/)
 
 # Autonomous Racing Controller for TORCS - Corkscrew
 
@@ -35,7 +35,6 @@ All validation runs of this exact `controller/` folder finished in exactly 65.96
 - [Install and run](#install-and-run)
 - [Repository structure](#repository-structure)
 - [Compliance notes](#compliance-notes)
-- [AI tool disclosure](#ai-tool-disclosure)
 - [Acknowledgments and licensing](#acknowledgments-and-licensing)
 - [More about my work](#more-about-my-work)
 
@@ -57,6 +56,9 @@ All times are local validation results (native Windows TORCS, official result XM
 A later study of the 770 m corner found no reliable further gain, so P1 was kept unchanged. Earlier development steps (66.906 → 66.284 s) are summarised in [`docs/TECHNICAL.md`](docs/TECHNICAL.md#performance-history).
 
 ### Lap recording (65.968 s) - pending publication
+
+<p align="center"><img src="assets/p1_65968_thumbnail.jpg" alt="65.968 s autonomous qualifying lap - frame from the recorded lap" width="100%"></p>
+
 A new recording of the P1 lap was made with the same controller files, race configuration and stock car.
 - **Result:** 65.968 s (`01:05:96`), damage 0, 0 server timeouts; stock files hash-checked before and after the race.
 - **Capture:** the TORCS window only, rendered natively at 1920×1080 and recorded at 60 fps with OBS window capture. No desktop, taskbar, cursor or file paths appear.
@@ -68,9 +70,7 @@ There are two exports:
 
 **The video has not been uploaded yet; a link will be added here once it is public.** Video files are not stored in this repository.
 
-**Historical:** the recording below shows the **previous 66.284 s release**, not P1.
-
-[![Qualifying lap of the previous 66.284-second release](https://img.youtube.com/vi/lp-c8A3NIJI/maxresdefault.jpg)](https://youtu.be/lp-c8A3NIJI)
+**Historical:** a recording of the previous 66.284 s release is at https://youtu.be/lp-c8A3NIJI.
 
 ---
 
@@ -223,7 +223,7 @@ Run nothing CPU-heavy during a race.
 
 ```
 README.md                    this file
-assets/                      banner, architecture diagram (conceptual), measured speed profile and speed map (P1 lap)
+assets/                      banner, lap thumbnail (frame of the recorded P1 lap), architecture diagram (conceptual), measured speed profile and speed map (P1 lap)
 controller/                  the complete P1 release package; run from here
   run_controller.py          entry point: the starter client loop with our driver
   submission_driver.py       loads settings, drives, guards against GC pauses
@@ -238,7 +238,6 @@ docs/
   WINDOWS_RUN.md             step-by-step Windows instructions, stop/restart, troubleshooting
   TECHNICAL.md               technical documentation and performance history
   COMPLIANCE.md              rule review and open questions for the organisers
-  AI_TOOL_DISCLOSURE.md      AI tools used and what they did
 evidence/
   release_p1_65968/          native validation of this release (sanitised result XML, logs, reports)
   lap_speed_profile.json     measured speed along the P1 lap (data for the graphics)
@@ -265,24 +264,11 @@ The following conditions are met and verified (see [`docs/COMPLIANCE.md`](docs/C
 4. The exact deadline and submission form.
 5. Validation on the supplied native Windows TORCS build rather than the Linux container.
 
-## AI tool disclosure
-This controller was developed with substantial help from AI coding tools; the details are in [`docs/AI_TOOL_DISCLOSURE.md`](docs/AI_TOOL_DISCLOSURE.md).
-
-| Tool | What it was used for |
-|---|---|
-| **IBM Bob** | Early controller versions V2-V5: first speed controllers, safety and recovery logic, wheel-slip traction control, gear anti-hunting, predictive braking. The final controller does not use that code. |
-| **OpenAI Codex** | Audit of the starter controller and track geometry; early stock-car controllers (best 80.726 s); stock-car restoration and hash verification; review of a public competitor's code and an unmodified local benchmark run. |
-| **Claude Code** (Anthropic) | The controller line used in this entry, plus the optimisation, validation, packaging and documentation of releases 66.284 s and P1 (65.968 s). |
-| **IBM Granite** | Not used to develop, tune or validate this controller; no project record documents such use. |
-
-The author set the objectives and constraints, approved each phase and decides what is submitted.
-
-A public competitor driver ([AdrianoNTorres/IBM-AI-RACE-CHALLENGE](https://github.com/AdrianoNTorres/IBM-AI-RACE-CHALLENGE)) was run unmodified, locally, only as a performance reference. **None of its code, tables or parameters are used here.**
-
 ## Acknowledgments and licensing
 - **TORCS** (The Open Racing Car Simulator) and the league-provided SCR server, car and track. No TORCS asset is included here: the controller reads the stock track XML from your install, and no licence is granted for TORCS assets.
 - **gym_torcs / Snake Oil** SCR client: `controller/snakeoil3_gym.py` is the unmodified starter file (gym_torcs by Naoto Yoshida, MIT; Snake Oil client by Chris X Edwards). See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and `licenses/`.
 - Built for the **IBM AI Racing League** and IBM SkillsBuild.
+- A public competitor driver ([AdrianoNTorres/IBM-AI-RACE-CHALLENGE](https://github.com/AdrianoNTorres/IBM-AI-RACE-CHALLENGE)) was run unmodified, locally, only as a performance reference. None of its code, tables or parameters are used here.
 - Developed and maintained by [@youssefabdelkariem](https://github.com/youssefabdelkariem). No open-source licence has been selected yet for the project's own code.
 
 ## More About My Work

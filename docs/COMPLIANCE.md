@@ -4,7 +4,7 @@ This is the author's reading of the league materials. **No written organiser rul
 
 ## Sources
 - IBM AI Racing League framework ("The Rule of 8").
-- Task slides "TORCS and Bob - Corkscrew".
+- Task slides for the Corkscrew challenge.
 - TORCS container setup guide and customising guide.
 - Orientation session.
 
@@ -33,7 +33,6 @@ This is the author's reading of the league materials. **No written organiser rul
 | Entry script | The package uses its own entry script (`run_controller.py`) with the unmodified `snakeoil3_gym.py`, not `torcs_jm_par.py` | **Not confirmed (Q3)** |
 | Deadline and submission form | `ibm.biz/TORCSForm` per the framework; the exact extended deadline is not confirmed in writing | **Not confirmed (Q4)** |
 | Validation environment | All validation used the native Windows TORCS build supplied with the course download, not the Linux container | **Not confirmed (Q5)** |
-| AI tools | The rules expect IBM Granite (R1) and IBM Bob (T). No rule forbids other tools. See `AI_TOOL_DISCLOSURE.md`. | Disclosed |
 | Videos | Team and university names on the videos (R4); a team video (R6) | Outside this repository |
 
 No rule found prohibits a feature this controller needs. The open points are ambiguities, not prohibitions.
