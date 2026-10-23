@@ -2,7 +2,9 @@
   <img src="assets/banner.svg" alt="IBM AI Racing League - Autonomous Racing Controller" width="100%">
 </p>
 
-Project page: https://youssef.studio/engineering/ibm-ai-racing/
+**Portfolio:** [youssef.studio](https://youssef.studio) — Explore more of my projects, technical work, and creative portfolio.
+
+Project write-up: [youssef.studio/engineering/ibm-ai-racing](https://youssef.studio/engineering/ibm-ai-racing/) (at the time of writing it describes the earlier 66.284 s version).
 
 # Autonomous Racing Controller for TORCS - Corkscrew
 
@@ -35,6 +37,7 @@ All validation runs of this exact `controller/` folder finished in exactly 65.96
 - [Compliance notes](#compliance-notes)
 - [AI tool disclosure](#ai-tool-disclosure)
 - [Acknowledgments and licensing](#acknowledgments-and-licensing)
+- [More about my work](#more-about-my-work)
 
 ---
 
@@ -53,8 +56,19 @@ All times are local validation results (native Windows TORCS, official result XM
 
 A later study of the 770 m corner found no reliable further gain, so P1 was kept unchanged. Earlier development steps (66.906 → 66.284 s) are summarised in [`docs/TECHNICAL.md`](docs/TECHNICAL.md#performance-history).
 
-### Qualifying video
-A raw, unedited screen recording of the 65.968 s lap exists. It is checked frame by frame and shows the standing start, the full lap, the result `01:05:96` and `Damages 0`. **It is not published yet.** The link below shows the **previous 66.284 s release**, not this one:
+### Lap recording (65.968 s) - pending publication
+A new recording of the P1 lap was made with the same controller files, race configuration and stock car.
+- **Result:** 65.968 s (`01:05:96`), damage 0, 0 server timeouts; stock files hash-checked before and after the race.
+- **Capture:** the TORCS window only, rendered natively at 1920×1080 and recorded at 60 fps with OBS window capture. No desktop, taskbar, cursor or file paths appear.
+- **Content:** the grid ("Ready"), the standing start, the complete lap with the timer, damage, speed and rpm read-outs visible throughout, and 5 s of the TORCS results screen.
+
+There are two exports:
+- a **clean qualifying version** (unedited race footage only);
+- a **YouTube version** with a short title card before the start and a credit card after the results. The race footage itself is not altered.
+
+**The video has not been uploaded yet; a link will be added here once it is public.** Video files are not stored in this repository.
+
+**Historical:** the recording below shows the **previous 66.284 s release**, not P1.
 
 [![Qualifying lap of the previous 66.284-second release](https://img.youtube.com/vi/lp-c8A3NIJI/maxresdefault.jpg)](https://youtu.be/lp-c8A3NIJI)
 
@@ -270,3 +284,9 @@ A public competitor driver ([AdrianoNTorres/IBM-AI-RACE-CHALLENGE](https://githu
 - **gym_torcs / Snake Oil** SCR client: `controller/snakeoil3_gym.py` is the unmodified starter file (gym_torcs by Naoto Yoshida, MIT; Snake Oil client by Chris X Edwards). See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and `licenses/`.
 - Built for the **IBM AI Racing League** and IBM SkillsBuild.
 - Developed and maintained by [@youssefabdelkariem](https://github.com/youssefabdelkariem). No open-source licence has been selected yet for the project's own code.
+
+## More About My Work
+
+For more projects, technical experiments, 3D/VFX work, and interactive project breakdowns, visit my portfolio:
+
+**[youssef.studio](https://youssef.studio)**
