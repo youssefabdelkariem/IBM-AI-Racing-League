@@ -47,7 +47,7 @@ All laps were run with the stock car, track and physics, a standing start and ze
 
 | Version | Lap (s) | Change from the previous version |
 |---|---:|---|
-| Previous release (`main` before this branch) | 66.284 | - |
+| Previous release (original submission package) | 66.284 | - |
 | Finish-line fix | 66.262 | A speed look-ahead read the standing-start speed cap at the end of the lap and braked for the line. The look-ahead is now clamped to the last plan sample. |
 | Traction control and ABS tuning | 66.020 | Looser traction control and earlier ABS release: about 0.55 s more full throttle and 0.39 s less braking per lap. |
 | **Corkscrew line (P1, this release)** | **65.968** | Straighter line through the left-right direction change at 2,301-2,493 m. Peak sideslip there fell from 14.4° to 9.4°, and minimum speed rose by 4.3 km/h. |
